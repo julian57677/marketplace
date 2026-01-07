@@ -2,8 +2,11 @@ import React from "react";
 import { assets } from "../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon } from "lucide-react";
+import {useClerk, useUser, UserButton} from '@clerk/clerk-react'
 
 const Navbar = () => {
+  const {user} = useUser()
+  const {openSignIn} = useClerk()
   const [menuOpen, setMenuOpen] = React.useState(false);
   const navigate = useNavigate()
   return (
@@ -19,10 +22,10 @@ const Navbar = () => {
            <Link to='/marketplace' onClick={() => scrollTo(0, 0)}>
            Marketplace
           </Link>
-           <Link to='/messages' onClick={() => scrollTo(0, 0)}>
+           <Link to={user ? '/messages' : "#"} onClick={() => user ? scrollTo(0, 0) :openSignIn()}>
            Message
           </Link>
-           <Link to='/my-listing' onClick={() => scrollTo(0, 0)}>
+           <Link to={user ? '/my-listing' : "#"} onClick={() => user ? scrollTo(0, 0) :openSignIn()}>
            My Listing
           </Link>
         </div>
