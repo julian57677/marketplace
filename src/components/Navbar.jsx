@@ -1,7 +1,7 @@
 import React from "react";
 import { assets } from "../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
-import { MenuIcon, XIcon } from "lucide-react";
+import { BoxIcon, GripIcon, ListIcon, MenuIcon, MessageCircleMoreIcon, XIcon } from "lucide-react";
 import {useClerk, useUser, UserButton} from '@clerk/clerk-react'
 
 const Navbar = () => {
@@ -30,12 +30,32 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div>
-          <button className="max-sm:hidden cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
-            Login
-          </button>
-          <MenuIcon onClick={() => setMenuOpen(true)} className="sm:hidden" />
-        </div>
+        {!user ? (
+          <div>
+            <button onClick={openSignIn} className="max-sm:hidden cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
+              Login
+            </button>
+            <MenuIcon onClick={() => setMenuOpen(true)} className="sm:hidden" />
+          </div>) : (
+            <UserButton>
+              <UserButton.MenuItems>
+                <UserButton.Action label='Marketplace' labelIcon={<GripIcon size={16}/>} onClick={()=> navigate('/marketplace')}/>
+              </UserButton.MenuItems>
+
+              <UserButton.MenuItems>
+                <UserButton.Action label='Messages' labelIcon={<MessageCircleMoreIcon size={16}/>} onClick={()=> navigate('/messages')}/>
+              </UserButton.MenuItems>
+
+              <UserButton.MenuItems>
+                <UserButton.Action label='My Listing' labelIcon={<ListIcon size={16}/>} onClick={()=> navigate('/my-listings')}/>
+              </UserButton.MenuItems>
+
+              <UserButton.MenuItems>
+                <UserButton.Action label='My Orders' labelIcon={<BoxIcon size={16}/>} onClick={()=> navigate('/my-order')}/>
+              </UserButton.MenuItems>
+            </UserButton>
+          )}
+
       </div>
       {/* Mobile Menu */}
       <div
@@ -45,10 +65,10 @@ const Navbar = () => {
           <Link to='/marketplace' onClick={() => setMenuOpen(false)}>
             Marketplace
           </Link>
-          <button> Message </button>
-          <button> my Listing</button>
+          <button onClick={openSignIn}> Message </button>
+          <button onClick={openSignIn}>  My Listing</button>
          
-          <button className=" cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
+          <button onClick={openSignIn} className=" cursor-pointer px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
             Login
           </button>
           <XIcon onClick={() => setMenuOpen(false)} className="absolute size-8 right-6 top-6 text-gray-500 hover:text-gray-700 cursor-pointer"/>
